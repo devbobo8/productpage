@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Simple Bookstore App</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" th:href="@{bootstrap/css/bootstrap.min.css}">
+  <!-- Optional theme -->
+  <link rel="stylesheet" th:href="@{bootstrap/css/bootstrap-theme.min.css}">
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">BookInfo Sample</a>
+      </div>
+      <p th:if="${user != null}" class="navbar-text navbar-right">
+        <i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+        <span style="padding-left: 5px;">${user} ( <a href="logout">sign out</a> )</span>
+      </p>
+      <button th:unless="${user == null}" type="button" class="btn btn-default navbar-btn navbar-right" data-toggle="modal" href="#login-modal">Sign
+        in</button>
+    </div>
+  </nav>
+
+  <div id="login-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Please sign in</h4>
+        </div>
+        <div class="modal-body">
+          <form method="post" th:action="@{/login}" name="login_form">
+            <p><input type="text" class="form-control" name="username" id="username" placeholder="User Name"></p>
+            <p><input type="password" class="form-control" name="passwd" placeholder="Password"></p>
+            <p>
+              <button type="submit" class="btn btn-primary">Sign in</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </p>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row" th:object="${product}">
+      <div class="col-md-12">
+        <h3 class="text-center text-primary" th:text="*{title}"></h3>
+        <p th:utext="${'Summary  ' + product.descriptionHtml}"></p>
+      </div>
+    </div>
+
+    <div class="row" >
+      <div th:if="${detail.getStatusCode() == 200}" class="col-md-6">
+        <h4 class="text-center text-primary">Book Details</h4>
+        <dl>
+          <dt>Type:</dt><p th:text="${detail.getData().getType()}"/>
+          <dt>Pages:</dt><p th:text="${detail.getData().getPages()}"/>
+          <dt>Publisher:</dt><p th:text="${detail.getData().getPublisher()}"/>
+          <dt>Language:</dt><p th:text="${detail.getData().getLanguage()}"/>
+          <dt>ISBN-10:</dt><p th:text="${detail.getData().getIsbn10()}"/>
+          <dt>ISBN-13:</dt><p th:text="${detail.getData().getIsbn13()}"/>
+        </dl>
+      </div>
+      <div th:unless="${detail.getStatusCode() == 200}" class="col-md-6">
+        <h4 class="text-center text-primary">Error fetching product details!</h4>
+        <p th:text="${detail.error}"></p>
+      </div>
+
+      <div th:if="${reviews.getStatusCode() == 200}" class="col-md-6">
+        <h4 class="text-center text-primary">Book Reviews</h4>
+        <blockquote th:each="review, iStat: ${reviews.getData().reviews}">
+          <p th:text="${review.text}"></p>
+          <small th:text="${review.reviewer}"></small>
+          <div th:if="${review.rating != null}">
+          <font th:if="${review.rating.error == null || review.rating.error == ''}" color="{{ review.rating.color }}">
+            <!-- full stars: -->
+            <span th:each="rating : ${#numbers.sequence(0, review.rating.stars - 1)}" class="glyphicon glyphicon-star"></span>
+            <!-- empty stars: -->
+            <span th:each="rating : ${#numbers.sequence(0, 5 - review.rating.stars + 1)}" class="glyphicon glyphicon-star-empty"></span>
+          </font>
+          <p th:unless="${review.rating.error == null || review.rating.error == ''}"><i>{{ review.rating.error }}</i></p>
+          </div>
+        </blockquote>
+      </div>
+      <div th:unless="${reviews.getStatusCode() == 200}" class="col-md-6">
+        <h4 class="text-center text-primary">Error fetching product reviews!</h4>
+        <p th:text="${reviews.error}"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script th:src="@{jquery.min.js}"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script th:src="@{bootstrap/js/bootstrap.min.js}"></script>
+
+  <script type="text/javascript">
+    $('#login-modal').on('shown.bs.modal', function () {
+      $('#username').focus();
+    });
+  </script>
+</body>
+</html>
