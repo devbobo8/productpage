@@ -80,13 +80,13 @@
           <p th:text="${review.text}"></p>
           <small th:text="${review.reviewer}"></small>
           <div th:if="${review.rating != null}">
-          <font th:if="${review.rating.error == null || review.rating.error == ''}" color="{{ review.rating.color }}">
+          <div th:if="${review.rating.error == null || review.rating.error == ''}" th:style="${ review.rating.color != null && review.rating.color != '' ? 'color:' + review.rating.color : '' }">
             <!-- full stars: -->
             <span th:each="rating : ${#numbers.sequence(0, review.rating.stars - 1)}" class="glyphicon glyphicon-star"></span>
             <!-- empty stars: -->
             <span th:each="rating : ${#numbers.sequence(0, 5 - review.rating.stars + 1)}" class="glyphicon glyphicon-star-empty"></span>
-          </font>
-          <p th:unless="${review.rating.error == null || review.rating.error == ''}"><i>{{ review.rating.error }}</i></p>
+          </div>
+          <p th:unless="${review.rating.error == null || review.rating.error == ''}"><i th:text="${review.rating.error}"></i></p>
           </div>
         </blockquote>
       </div>
