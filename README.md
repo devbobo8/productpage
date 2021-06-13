@@ -8,4 +8,3 @@ Java implementation of the productpage service which is from the Istio sample ap
 cd k8s
 kubectl apply -k .
 ```
-
