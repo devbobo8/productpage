@@ -30,7 +30,7 @@ public class RatingClientImpl implements RatingClient {
     }
 
     public RequestResult<Ratings> GetRatings(String productId, HttpHeaders headers){
-        ResponseEntity<Ratings> responseEntity = HttpRequestUtil.GetObject(getRatingServiceUrl(productId), restTemplate, Ratings.class, null, headers);
+        ResponseEntity<Ratings> responseEntity = HttpRequestUtil.GetObject(getRatingServiceUrl(productId), restTemplate, Ratings.class, headers);
         RequestResult<Ratings> result = new RequestResult<>();
         if (responseEntity.getStatusCode() == HttpStatus.OK){
             result.setData(responseEntity.getBody());

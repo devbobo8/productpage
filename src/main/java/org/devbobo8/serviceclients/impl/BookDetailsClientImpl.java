@@ -32,7 +32,7 @@ public class BookDetailsClientImpl implements BookDetailClient {
     }
 
     public RequestResult<BookDetail> GetDetail(String productId, HttpHeaders headers){
-        ResponseEntity<BookDetail> responseEntity = HttpRequestUtil.GetObject(getDetailServiceUrl(productId), restTemplate, BookDetail.class, null, headers);
+        ResponseEntity<BookDetail> responseEntity = HttpRequestUtil.GetObject(getDetailServiceUrl(productId), restTemplate, BookDetail.class, headers);
         RequestResult<BookDetail> result = new RequestResult<>();
         if (responseEntity.getStatusCode() == HttpStatus.OK){
             result.setData(responseEntity.getBody());

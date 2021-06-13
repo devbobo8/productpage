@@ -30,7 +30,7 @@ public class ReviewClientImpl implements ReviewClient {
     }
 
     public RequestResult<Reviews> GetReviews(String productId, HttpHeaders headers){
-        ResponseEntity<Reviews> responseEntity = HttpRequestUtil.GetObject(getReviewServiceUrl(productId), restTemplate, Reviews.class, null, headers);
+        ResponseEntity<Reviews> responseEntity = HttpRequestUtil.GetObject(getReviewServiceUrl(productId), restTemplate, Reviews.class, headers);
         RequestResult<Reviews> result = new RequestResult<>();
         if (responseEntity.getStatusCode() == HttpStatus.OK){
             result.setData(responseEntity.getBody());

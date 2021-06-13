@@ -1,10 +1,9 @@
 package org.devbobo8.util;
 
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +12,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class HttpRequestUtil {
-    public static <T> ResponseEntity<T> GetObject(String url, RestTemplate restTemplate, Class<T> responseType, RequestCallback requestCallback, HttpHeaders headers){
-        ResponseExtractor<ResponseEntity<T>> responseExtractor = restTemplate.responseEntityExtractor(responseType);
-        return restTemplate.execute(url, HttpMethod.GET, requestCallback, responseExtractor, responseType);
+
+    public static <T> ResponseEntity<T> GetObject(String url, RestTemplate restTemplate, Class<T> responseType, HttpHeaders headers){
+        HttpEntity requestEntity = new HttpEntity<>("", headers);
+        return restTemplate.exchange(url, HttpMethod.GET, requestEntity, responseType);
     }
 
     private static HashSet<String> forwardHeaderKeys;
