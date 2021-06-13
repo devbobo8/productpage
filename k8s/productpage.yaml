@@ -42,7 +42,7 @@ spec:
       serviceAccountName: bookinfo-productpage
       containers:
         - name: productpage
-          image: docker.io/devbobo/productpage:1.0.3
+          image: docker.io/devbobo/productpage:1.0.4
           imagePullPolicy: IfNotPresent
           env:
             - name: "server.port"
